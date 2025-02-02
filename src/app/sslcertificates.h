@@ -488,6 +488,7 @@ private:
 
     int add_ext(X509 *cert, int nid, const char *value);
     int add_ext_bytxt(X509 *cert, const char *nid, const char *value);
+    int add_ext_bytxt(X509_REQ *csr, const char* nid, const char *value);
 
 };
 

@@ -1,10 +1,11 @@
 #include "sslcertificates.h"
+#ifdef _WIN32
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
   #include <openssl\applink.c>
 #else
   #include <openssl\applink.c>
 #endif
-
+#endif
 #include <string.h>
 
 #include <openssl/ossl_typ.h>
@@ -47,7 +48,7 @@ SSLCertificates::SSLCertificates()
     if ((this->dsakey=DSA_new())    == nullptr)    throw 10;
 
     this->output_display=nullptr;
-    CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
+    //CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
     this->bio_err=BIO_new_fp(stdout, BIO_NOCLOSE);
 
     // OpenSSL load of quite everything.
@@ -123,26 +124,25 @@ void SSLCertificates::print_ssl_errors(char* buffer,size_t size)
     char linebuf[200]=""; // TODO : dynamic size with max size
     if (this->SSLErrorNum == -1)
     {
-        strcpy_s(buffer,MAX_SSL_ERRORS_BUF_SIZE,"No current SSL errors ");
+        strcpy(buffer,"No current SSL errors ");
         return;
     }
     buffer[0]='\0';
     for (int i=0;i<=this->SSLErrorNum;i++)
     {
-       sprintf(linebuf,"Lib : %s, doing : %s, reason : %s (%i/%i/%i)\n",
+       sprintf(linebuf,"Lib : %s, doing : %s, reason : %s (%i/%i)\n",
                ERR_lib_error_string(this->SSLErrorList[i]),
                ERR_func_error_string((this->SSLErrorList[i])),
                ERR_reason_error_string((this->SSLErrorList[i])),
                ERR_GET_LIB(this->SSLErrorList[i]),
-               ERR_GET_FUNC(this->SSLErrorList[i]),
                ERR_GET_REASON(this->SSLErrorList[i]));
        if ((strlen (buffer)+strlen (linebuf)) > size)
        {
-           strcat_s(buffer,MAX_SSL_ERRORS_BUF_SIZE,"[...]");
+           strcat(buffer,"[...]");
            this->SSLErrorNum=-1;
            return;
        }
-       strcat_s(buffer,MAX_SSL_ERRORS_BUF_SIZE,linebuf);
+       strcat(buffer,linebuf);
     }
     this->SSLErrorNum=-1;
 }
@@ -193,8 +193,8 @@ int SSLCertificates::add_cert_object_byname(const char* label,const char* conten
        return 1;
    }
 */
-   this->subject_id[this->subjectNum] = _strdup(label);
-   this->subject[this->subjectNum] = reinterpret_cast<unsigned char*>( _strdup(content));
+   this->subject_id[this->subjectNum] = strdup(label);
+   this->subject[this->subjectNum] = reinterpret_cast<unsigned char*>( strdup(content));
    this->subjectNum++;
 
    return 0;
@@ -613,7 +613,6 @@ int SSLCertificates::create_csr()
     }
 
     /* Add various extensions: standard extensions */
-    //TODO : not valid for CSR, change this
     for (i=0;i<this->extensionNum;i++)
     {
         if (this->extensionCritical[i]==0)
@@ -622,7 +621,7 @@ int SSLCertificates::create_csr()
             value="critical,";
 
         value += this->extensionVal[i].data();
-        if (this->add_ext_bytxt(this->x509,this->extensionName[i].data(),value.data()) == 0)
+        if (this->add_ext_bytxt(this->csr,this->extensionName[i].data(),value.data()) == 0)
         {
             this->get_ssl_errors();
             return 1;
@@ -654,7 +653,7 @@ int SSLCertificates::get_csr_PEM(char *Skey, size_t maxlength) {
     if (bptr->length >= maxlength) {
         BIO_free(mem);return 2;
     }
-    strncpy_s(Skey,maxlength,bptr->data,bptr->length);
+    strncpy(Skey,bptr->data,bptr->length);
     Skey[bptr->length+1]='\0';
     BIO_free(mem);
     return 0;
@@ -794,7 +793,7 @@ int SSLCertificates::get_DN_Elmt_from_name(char *CN, size_t maxlength, X509_NAME
      {
        return 2;
      }
-   strncpy_s(CN,maxlength,common_name_str,strlen(common_name_str));
+   strncpy(CN,common_name_str,strlen(common_name_str));
    CN[strlen(common_name_str)]=0;
    return 0;
 }
@@ -1064,10 +1063,10 @@ int SSLCertificates::get_key_type(char* keytype,unsigned int size)
     case KeyRSA:
     case KeyDSA:
     case KeyEC:
-        strcpy_s(keytype,size,keyTypeList[this->keyType-1]);
+        strcpy(keytype,keyTypeList[this->keyType-1]);
         return 0;
     }
-    strcpy_s(keytype,size,"Unkown");
+    strcpy(keytype,"Unkown");
     return 1;
 }
 
@@ -1244,7 +1243,7 @@ int SSLCertificates::get_pkcs12_certs_pem(unsigned int n,char *Skey, size_t maxl
   if (n>=this->caListCerts.size()) return 10;
   std::string certPEM;
   int retcode = get_cert_PEM(certPEM,this->caListCerts.at(n));
-  strcpy_s(Skey,maxlength,certPEM.c_str());
+  strcpy(Skey,certPEM.c_str());
   return retcode;
 }
 
@@ -1269,7 +1268,7 @@ int SSLCertificates::load_pkcs12(FILE *file, const char* password)
   }
   char * name=find_friendly_name(p12);
   get_pkcs12_certs();
-  p12Name=_strdup(name);
+  p12Name=strdup(name);
   // TODO check mem leak. free(name) doest sigsev.
   //free(name);
   PKCS12_free(p12);
@@ -1325,9 +1324,9 @@ int SSLCertificates::pem_password_callback (char *buf, int size, int /*rwflag*/,
     //printf("Pass :%s / sizebuf : %i / %i\n",(char*)userdata,size,strlen((char*)userdata));
     //fflush(stdout);
     if (size_t < strlen(static_cast<char*>(userdata)))
-        strncpy_s(buf,size_t, static_cast<char*>(userdata), size_t);
+        strncpy(buf,static_cast<char*>(userdata), size_t);
     else
-        strncpy_s(buf, size_t,static_cast<char*>(userdata),strlen(static_cast<char*>(userdata)));
+        strncpy(buf, static_cast<char*>(userdata),strlen(static_cast<char*>(userdata)));
     buf[strlen(static_cast<char*>(userdata))] = '\0';
     //printf("Pass :%s / %i\n",buf,strlen(buf));
     //fflush(stdout);
@@ -1557,6 +1556,36 @@ int SSLCertificates::add_ext_bytxt(X509 *cert, const char* nid, const char *valu
 
     X509_add_ext(cert,ex,-1);
     X509_EXTENSION_free(ex);
+    return 1;
+}
+
+int SSLCertificates::add_ext_bytxt(X509_REQ *csr, const char* nid, const char *value)
+{
+    X509_EXTENSION *ex;
+    X509V3_CTX ctx;
+
+    // Create a stack for extensions
+    STACK_OF(X509_EXTENSION) *extensions = sk_X509_EXTENSION_new_null();
+
+    X509V3_set_ctx(&ctx, nullptr, nullptr, nullptr, nullptr, 0);
+    ex = X509V3_EXT_conf(nullptr, &ctx, nid, value);
+
+    if (!ex) {
+        printf(" failed to create the extension");
+        return 0;
+    }
+
+    if (sk_X509_EXTENSION_push(extensions, ex)) {
+    } else {
+        printf( "Error adding X509 extension to stack\n");
+    }
+
+    if (!X509_REQ_add_extensions(csr,extensions))
+        printf("Error, could not add extension");
+
+    X509_EXTENSION_free(ex);
+
+    sk_X509_EXTENSION_free(extensions);
     return 1;
 }
 

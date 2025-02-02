@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>617</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,9 +43,9 @@
         <widget class="QPushButton" name="pushButtonGenerateCert">
          <property name="geometry">
           <rect>
-           <x>340</x>
+           <x>360</x>
            <y>200</y>
-           <width>81</width>
+           <width>75</width>
            <height>23</height>
           </rect>
          </property>
@@ -56,36 +56,69 @@
         <widget class="QComboBox" name="comboBoxCertGen">
          <property name="geometry">
           <rect>
-           <x>120</x>
+           <x>130</x>
            <y>200</y>
            <width>211</width>
-           <height>22</height>
+           <height>31</height>
           </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="sizeIncrement">
+          <size>
+           <width>0</width>
+           <height>2</height>
+          </size>
          </property>
         </widget>
         <widget class="QComboBox" name="comboBoxCertDigest">
          <property name="geometry">
           <rect>
-           <x>50</x>
-           <y>170</y>
-           <width>101</width>
-           <height>22</height>
+           <x>20</x>
+           <y>200</y>
+           <width>99</width>
+           <height>32</height>
           </rect>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>101</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="sizeIncrement">
+          <size>
+           <width>0</width>
+           <height>10</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::TabFocus</enum>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
+         </property>
          <property name="editable">
           <bool>true</bool>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
          </property>
         </widget>
         <widget class="QLabel" name="labelCertDigest">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>20</x>
            <y>170</y>
            <width>47</width>
            <height>16</height>
@@ -98,9 +131,9 @@
         <widget class="QLabel" name="labelDaysValid">
          <property name="geometry">
           <rect>
-           <x>170</x>
+           <x>140</x>
            <y>170</y>
-           <width>71</width>
+           <width>91</width>
            <height>20</height>
           </rect>
          </property>
@@ -116,6 +149,12 @@
            <width>41</width>
            <height>20</height>
           </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="text">
           <string>365</string>
@@ -190,9 +229,9 @@
         <widget class="QPushButton" name="pushButtonLoadPKCS12">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>250</y>
-           <width>75</width>
+           <x>30</x>
+           <y>270</y>
+           <width>101</width>
            <height>23</height>
           </rect>
          </property>
@@ -209,9 +248,9 @@
         <widget class="QPushButton" name="pushButtonSave2p12">
          <property name="geometry">
           <rect>
-           <x>90</x>
-           <y>250</y>
-           <width>75</width>
+           <x>170</x>
+           <y>270</y>
+           <width>101</width>
            <height>23</height>
           </rect>
          </property>
@@ -299,7 +338,7 @@
           <rect>
            <x>20</x>
            <y>30</y>
-           <width>52</width>
+           <width>71</width>
            <height>20</height>
           </rect>
          </property>
@@ -316,9 +355,9 @@
         <widget class="QLineEdit" name="lineEditCertCN">
          <property name="geometry">
           <rect>
-           <x>80</x>
+           <x>90</x>
            <y>30</y>
-           <width>351</width>
+           <width>341</width>
            <height>20</height>
           </rect>
          </property>
@@ -339,8 +378,8 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>400</width>
-              <height>135</height>
+              <width>500</width>
+              <height>140</height>
              </size>
             </property>
             <property name="title">
@@ -349,9 +388,9 @@
             <widget class="QPushButton" name="pushButtonGenerate">
              <property name="geometry">
               <rect>
-               <x>210</x>
-               <y>20</y>
-               <width>110</width>
+               <x>360</x>
+               <y>90</y>
+               <width>101</width>
                <height>23</height>
               </rect>
              </property>
@@ -362,8 +401,8 @@
             <widget class="QLabel" name="labelKeyCipher">
              <property name="geometry">
               <rect>
-               <x>250</x>
-               <y>80</y>
+               <x>310</x>
+               <y>50</y>
                <width>41</width>
                <height>20</height>
               </rect>
@@ -375,11 +414,20 @@
             <widget class="QComboBox" name="comboBoxKeyCipher">
              <property name="geometry">
               <rect>
-               <x>250</x>
-               <y>100</y>
-               <width>69</width>
+               <x>360</x>
+               <y>50</y>
+               <width>111</width>
                <height>22</height>
               </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::TabFocus</enum>
              </property>
              <property name="editable">
               <bool>true</bool>
@@ -401,11 +449,29 @@
             <widget class="QComboBox" name="comboBoxKeyType">
              <property name="geometry">
               <rect>
-               <x>70</x>
+               <x>90</x>
                <y>20</y>
-               <width>121</width>
-               <height>22</height>
+               <width>103</width>
+               <height>32</height>
               </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>2</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::TabFocus</enum>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
              </property>
             </widget>
             <widget class="QLabel" name="labelKeySize">
@@ -413,7 +479,7 @@
               <rect>
                <x>10</x>
                <y>50</y>
-               <width>53</width>
+               <width>71</width>
                <height>20</height>
               </rect>
              </property>
@@ -424,33 +490,63 @@
             <widget class="QComboBox" name="comboBoxKeySize">
              <property name="geometry">
               <rect>
-               <x>70</x>
+               <x>90</x>
                <y>50</y>
-               <width>131</width>
-               <height>20</height>
+               <width>99</width>
+               <height>32</height>
               </rect>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>300</height>
+              </size>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>2</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::TabFocus</enum>
+             </property>
              <property name="contextMenuPolicy">
-              <enum>Qt::PreventContextMenu</enum>
+              <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
              </property>
              <property name="inputMethodHints">
-              <set>Qt::ImhNone</set>
+              <set>Qt::InputMethodHint::ImhNone</set>
              </property>
              <property name="editable">
               <bool>true</bool>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
              </property>
             </widget>
             <widget class="QLabel" name="Password">
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>100</y>
-               <width>22</width>
+               <y>90</y>
+               <width>71</width>
                <height>20</height>
               </rect>
              </property>
              <property name="text">
-              <string>Pass</string>
+              <string>Password</string>
              </property>
             </widget>
             <widget class="QLineEdit" name="lineEditKeyPass">
@@ -459,25 +555,37 @@
              </property>
              <property name="geometry">
               <rect>
-               <x>50</x>
-               <y>100</y>
-               <width>181</width>
+               <x>90</x>
+               <y>90</y>
+               <width>171</width>
                <height>20</height>
               </rect>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>2</height>
+              </size>
+             </property>
              <property name="inputMethodHints">
-              <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
+              <set>Qt::InputMethodHint::ImhHiddenText|Qt::InputMethodHint::ImhNoAutoUppercase|Qt::InputMethodHint::ImhNoPredictiveText|Qt::InputMethodHint::ImhSensitiveData</set>
              </property>
              <property name="echoMode">
-              <enum>QLineEdit::Password</enum>
+              <enum>QLineEdit::EchoMode::Password</enum>
              </property>
             </widget>
             <widget class="QCheckBox" name="checkBoxKeyPassEnable">
              <property name="geometry">
               <rect>
-               <x>210</x>
-               <y>50</y>
-               <width>121</width>
+               <x>330</x>
+               <y>20</y>
+               <width>141</width>
                <height>20</height>
               </rect>
              </property>
@@ -519,10 +627,10 @@
             <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
+               <enum>QSizePolicy::Policy::Minimum</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -537,7 +645,7 @@
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -559,7 +667,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="sizeConstraint">
-           <enum>QLayout::SetMaximumSize</enum>
+           <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
           </property>
           <item>
            <widget class="QTableWidget" name="TWExtensions">
@@ -607,14 +715,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>450</width>
-            <height>80</height>
+            <width>480</width>
+            <height>100</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>450</width>
-            <height>80</height>
+            <width>480</width>
+            <height>100</height>
            </size>
           </property>
           <property name="title">
@@ -625,9 +733,15 @@
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>51</width>
+             <width>61</width>
              <height>23</height>
             </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string>Display</string>
@@ -636,31 +750,15 @@
           <widget class="QGroupBox" name="groupBox_2">
            <property name="geometry">
             <rect>
-             <x>70</x>
-             <y>10</y>
-             <width>91</width>
+             <x>90</x>
+             <y>20</y>
+             <width>111</width>
              <height>61</height>
             </rect>
            </property>
            <property name="title">
             <string>Type</string>
            </property>
-           <widget class="QRadioButton" name="radioButtonDisplayCertificate">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>20</y>
-              <width>82</width>
-              <height>17</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Certificate</string>
-            </property>
-           </widget>
            <widget class="QRadioButton" name="radioButtonDisplayCSR">
             <property name="enabled">
              <bool>true</bool>
@@ -677,12 +775,28 @@
              <string>CSR</string>
             </property>
            </widget>
+           <widget class="QRadioButton" name="radioButtonDisplayCertificate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>101</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Certificate</string>
+            </property>
+           </widget>
           </widget>
           <widget class="QPushButton" name="pushButtonSaveCert">
            <property name="geometry">
             <rect>
-             <x>361</x>
-             <y>10</y>
+             <x>400</x>
+             <y>30</y>
              <width>60</width>
              <height>23</height>
             </rect>
@@ -694,8 +808,8 @@
           <widget class="QPushButton" name="pushButtonLoadCert">
            <property name="geometry">
             <rect>
-             <x>361</x>
-             <y>40</y>
+             <x>400</x>
+             <y>60</y>
              <width>60</width>
              <height>23</height>
             </rect>
@@ -708,10 +822,16 @@
            <property name="geometry">
             <rect>
              <x>220</x>
-             <y>10</y>
-             <width>131</width>
+             <y>30</y>
+             <width>161</width>
              <height>23</height>
             </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string>Test cert and key match</string>
@@ -720,8 +840,8 @@
           <widget class="QPushButton" name="pushButtonSignCert">
            <property name="geometry">
             <rect>
-             <x>289</x>
-             <y>40</y>
+             <x>320</x>
+             <y>60</y>
              <width>61</width>
              <height>23</height>
             </rect>
@@ -734,8 +854,8 @@
            <property name="geometry">
             <rect>
              <x>220</x>
-             <y>40</y>
-             <width>61</width>
+             <y>60</y>
+             <width>71</width>
              <height>17</height>
             </rect>
            </property>
@@ -769,14 +889,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>460</width>
-            <height>80</height>
+            <width>480</width>
+            <height>100</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>460</width>
-            <height>300</height>
+            <width>480</width>
+            <height>100</height>
            </size>
           </property>
           <property name="title">
@@ -786,7 +906,7 @@
            <property name="geometry">
             <rect>
              <x>380</x>
-             <y>40</y>
+             <y>50</y>
              <width>70</width>
              <height>23</height>
             </rect>
@@ -799,7 +919,7 @@
            <property name="geometry">
             <rect>
              <x>380</x>
-             <y>10</y>
+             <y>20</y>
              <width>71</width>
              <height>23</height>
             </rect>
@@ -812,7 +932,7 @@
            <property name="geometry">
             <rect>
              <x>310</x>
-             <y>10</y>
+             <y>20</y>
              <width>60</width>
              <height>23</height>
             </rect>
@@ -825,7 +945,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>20</y>
+             <y>30</y>
              <width>61</width>
              <height>23</height>
             </rect>
@@ -837,30 +957,30 @@
           <widget class="QLabel" name="labelDisplayKeyType">
            <property name="geometry">
             <rect>
-             <x>50</x>
-             <y>50</y>
+             <x>60</x>
+             <y>60</y>
              <width>151</width>
              <height>16</height>
             </rect>
            </property>
            <property name="focusPolicy">
-            <enum>Qt::WheelFocus</enum>
+            <enum>Qt::FocusPolicy::WheelFocus</enum>
            </property>
            <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
            </property>
            <property name="text">
             <string>Unknown</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
            </property>
           </widget>
           <widget class="QPushButton" name="pushButtonLoadKey">
            <property name="geometry">
             <rect>
              <x>310</x>
-             <y>40</y>
+             <y>50</y>
              <width>60</width>
              <height>23</height>
             </rect>
@@ -872,8 +992,8 @@
           <widget class="QPushButton" name="pushButtonTestKey">
            <property name="geometry">
             <rect>
-             <x>240</x>
-             <y>10</y>
+             <x>230</x>
+             <y>20</y>
              <width>60</width>
              <height>23</height>
             </rect>
@@ -886,22 +1006,22 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>50</y>
+             <y>60</y>
              <width>41</width>
              <height>16</height>
             </rect>
            </property>
            <property name="focusPolicy">
-            <enum>Qt::WheelFocus</enum>
+            <enum>Qt::FocusPolicy::WheelFocus</enum>
            </property>
            <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
            </property>
            <property name="text">
             <string>Type :</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
            </property>
           </widget>
          </widget>
@@ -920,8 +1040,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
-     <height>21</height>
+     <width>1200</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -962,7 +1082,6 @@
   <tabstop>pushButtonPushCert</tabstop>
   <tabstop>pushButtonOpenStack</tabstop>
   <tabstop>toolButtonCertValidity</tabstop>
-  <tabstop>pushButtonAddExtension</tabstop>
   <tabstop>pushButtonDisplayCert</tabstop>
   <tabstop>radioButtonDisplayCertificate</tabstop>
   <tabstop>radioButtonDisplayCSR</tabstop>

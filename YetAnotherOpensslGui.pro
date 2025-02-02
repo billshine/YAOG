@@ -1,14 +1,16 @@
 #-------------------------------------------------
 #   Project : Yet Another OpenSSL GUI
 #   Author : Patrick Proy
+#   Modifications : William Shine, 2025
 #   Copyright (C) 2018-2020
+#   Copyright (C) 2025, William Shine
 #
 #   Licence : http://www.gnu.org/licenses/gpl.txt
 #
 #-------------------------------------------------
 
 QT       += core gui network widgets
-
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 15
 TARGET = YetAnotherOpensslGui
 TEMPLATE = app
 
@@ -44,10 +46,10 @@ FORMS    += src/app/sslmainwindow.ui \
             src/app/cdialogpkcs12.ui \
             src/app/stackwindow.ui
 
-LIBS += -L"src/openssl/lib"
-LIBS += $$PWD/src/openssl/lib/libssl.lib  $$PWD/src/openssl/lib/libcrypto.lib
+LIBS += -L"/opt/homebrew/lib"
+LIBS += /opt/homebrew/lib/libssl.a  /opt/homebrew/lib/libcrypto.a 
 
-INCLUDEPATH += "src/openssl/include"
+INCLUDEPATH += "/opt/homebrew/include"
 
 RESOURCES += \
     src/app/ressources.qrc

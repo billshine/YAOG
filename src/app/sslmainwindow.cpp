@@ -31,11 +31,11 @@ SSLMainWindow::SSLMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::
     ui->comboBoxKeySize->addItem("2048",2048);
     ui->comboBoxKeySize->addItem("4096",4096);
     ui->comboBoxKeySize->addItem("8192",8192);
-
+    ui->comboBoxKeySize->setCurrentIndex(0);
     ui->comboBoxCertGen->addItem(tr("CSR + key"),1);
     ui->comboBoxCertGen->addItem(tr("Autosign + key"),2);
     ui->comboBoxCertGen->addItem(tr("CSR (existing key)"),3);
-
+    ui->comboBoxCertGen->setCurrentIndex(1);
     //SSLMainWindow::CBMutex.unlock(); // Hope there is only one instance of SSLMainWindow....
     SSLMainWindow::CBdata="";
 
@@ -49,15 +49,19 @@ SSLMainWindow::SSLMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::
     {
         ui->comboBoxCertDigest->addItem(this->getCert()->digestsList[i],i);
     }
+    ui->comboBoxCertDigest->setCurrentIndex(0);
     for (int i=0; i< this->getCert()->ciphersListNum;i++)
     {
         ui->comboBoxKeyCipher->addItem(this->getCert()->ciphersList[i],i);
     }
+    ui->comboBoxKeyCipher->setCurrentIndex(0);
     for (int i=0; i< this->getCert()->keyTypeListNum;i++)
     {
         ui->comboBoxKeyType->addItem(this->getCert()->keyTypeList[i],i);
     }
 
+    ui->comboBoxKeyType->setCurrentIndex(0);
+    connect(ui->comboBoxKeyType, SIGNAL(currentIndexChanged(int)), this, SLOT(on_comboBoxKeyType_currentIndexChanged(const int)));
     // Create Extension table
     this->ui->TWExtensions->setColumnCount(4);
     this->ui->TWExtensions->setRowCount(0);
@@ -68,7 +72,7 @@ SSLMainWindow::SSLMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::
     extensionElmtMapIndex=0;
 
     extensionSigMap = new QSignalMapper(this);
-    QObject::connect(extensionSigMap, SIGNAL(mapped(int)),
+    QObject::connect(extensionSigMap, SIGNAL(mappedInt(int)),
                 this, SLOT(extension_button_del_on_clicked(int)));
 
     //extensionElmt *basic=this->addExtensionElmt("basicConstraints",87,false,"CA:FALSE");
@@ -739,7 +743,7 @@ void SSLMainWindow::DlgGenerateCSRFinished()
     std::string csrDisplay;
     this->flush_async_dialog();
 
-    if ((this->getCert()->SSLError !=0)||(SSLCertificates::abortnow == 1)) // In case of generate error / cancel, just close
+    if ((0 == this->getCert()) || (this->getCert()->SSLError !=0)||(SSLCertificates::abortnow == 1)) // In case of generate error / cancel, just close
     {
 
     }
@@ -950,25 +954,33 @@ void SSLMainWindow::on_pushButtonTestKey_clicked()
     this->deleteCert();
 }
 
-void SSLMainWindow::on_comboBoxKeyType_currentIndexChanged(const QString &arg1)
+void SSLMainWindow::on_comboBoxKeyType_currentIndexChanged(const int arg1)
 {
     //QString keytype=this->ui->comboBoxKeyType->currentText();
-    if ((arg1=="rsa")|| arg1=="dsa")
-    {
-        ui->comboBoxKeySize->clear();
-        ui->comboBoxKeySize->addItem("1024",1024);
-        ui->comboBoxKeySize->addItem("2048",2048);
-        ui->comboBoxKeySize->addItem("4096",4096);
-        ui->comboBoxKeySize->addItem("8192",8192);
-    }
-    if (arg1=="ec")
-    {
-        this->init_cert();
-        ui->comboBoxKeySize->clear();
-        for (int i=0;i< this->getCert()->keyECListNum;i++)
-            ui->comboBoxKeySize->addItem(QString::fromStdString(this->getCert()->keyECList[i]),
-                                         this->getCert()->keyECListNIDCode[i]);
-        this->deleteCert();
+    switch(arg1) {
+        case 0:
+        case 1:
+            ui->comboBoxKeySize->clear();
+            ui->comboBoxKeySize->addItem("1024",1024);
+            ui->comboBoxKeySize->addItem("2048",2048);
+            ui->comboBoxKeySize->addItem("4096",4096);
+            ui->comboBoxKeySize->addItem("8192",8192);
+            ui->comboBoxKeySize->setCurrentIndex(1);
+            break;
+        case 2:
+            // this code is silly -- doesn't work. we need to get a
+            // list of curves and update the combo box with them.
+            this->init_cert();
+            ui->comboBoxKeySize->clear();
+            for (int i=0;i< this->getCert()->keyECListNum;i++){
+                ui->comboBoxKeySize->addItem(QString::fromStdString(this->getCert()->keyECList[i]),
+                                             this->getCert()->keyECListNIDCode[i]);
+            }
+            this->deleteCert();
+            ui->comboBoxKeySize->setCurrentIndex(0);
+            break;
+        default:
+            break;
     }
 }
 
@@ -1549,7 +1561,7 @@ void SSLMainWindow::on_pushButtonLoadPKCS12_clicked()
         return;
     }
     FILE* file;
-    if (fopen_s(&file,filename.toLocal8Bit().data(),"rb") != 0)
+    if ((file = fopen(filename.toLocal8Bit().data(),"rb")) != 0)
     {
         QMessageBox::warning(this,tr("Error opening file"),tr("Cannot open file : ")+filename);
         return;
@@ -1823,19 +1835,19 @@ void SSLMainWindow::network_reply_SSL_error(QNetworkReply* reply,QList<QSslError
 
 void SSLMainWindow::network_reply_finished(QNetworkReply* reply) //TODO
 {
-    QRegExp ok("^OK:.*");
-    QRegExp update("^UPDATE:.*");
+    QRegularExpression ok("^OK:.*");
+    QRegularExpression update("^UPDATE:.*");
     QByteArray bts = reply->readAll();
     QString str(bts);
     //QMessageBox::information(this,"Reply","return  : "+str,"OK");
     reply->deleteLater();
 
-    if (ok.exactMatch(str))
+    if (ok.match(str).hasMatch())
     {
         //QMessageBox::information(this,"Up to date",str,"OK");
         return;
     }
-    if (update.exactMatch(str))
+    if (update.match(str).hasMatch())
     { // TODO : download and update after user OK with it
       if (this->checkUpdateNum == 0)
       {

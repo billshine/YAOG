@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include <QLayout>
+#include <QRegularExpression>
 #include <QSettings>
 #include <QSslSocket>
 #include <QDebug>
@@ -335,7 +336,7 @@ private slots:
 
     void on_pushButtonSaveKey_clicked();
 
-    void on_comboBoxKeyType_currentIndexChanged(const QString &arg1);
+    void on_comboBoxKeyType_currentIndexChanged(const int arg1);
 
     void on_toolButtonCertValidity_clicked();
 

@@ -1,17 +1,33 @@
 # YAOG
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/05ad904b205c4b598d3378d30a286d7b)](https://www.codacy.com/manual/patrick_34/YAOG?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=patrickpr/YAOG&amp;utm_campaign=Badge_Grade)
+Current version :  2  using openSSL 3.4.0 and QT 6.8.1
+This is a port of PatrickPR/YAOG.  This project seems to have been abandoned,
+but with a bit of tweaking, I have it working on OSX using openssl 3.4.0 and
+QT 6.8.1
 
-Yet Another Openssl GUI : Qt base openssl GUI to create CSR, certificates, keys (RSA / DSA / EC), P12 etc...
+You will need to install both Openssl 3.4.0, and the community edition of QT.
+Once installed, you will have to modify YetAnotherOpensslGui.pro to use your 
+version of Openssl.
 
-Current version :  1.1.2 using openSSL 1.1.1g 
+To build, you run qmake first:
+qmake
+or for a release build, 
+qmake CONFIG+=Release
 
-If you have a problem, open an [issue](https://github.com/patrickpr/YAOG/issues/new). If you have a question go to [discussion](https://github.com/patrickpr/YAOG/discussions)
+Then
+make
 
-This project aims to allow creating certificates / keys in a quick and easy way.
+The app will run with OS/X 15.0 or higher.  To run with an older version, 
+modify the qmake MACOSX_DEPLOYMENT_TARGET to the version you want.
+
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 15
+is what it is currently set to
+
+To install openssl, use homebrew.  Homebrew installs openssl  in /opt/homebrew/ 
+
+
 
 Features :
-- Single executable with no dependencies (openssl & Qt lib are included)
 - Create auto sign certificates or CSR with immediate PEM display to copy/paste
 - Certificate signing
 - Stack to handle multiple certificates
@@ -20,22 +36,7 @@ Features :
 - Encrypt/decrypt keys, check certificate / key match
 - Set X509v3 extensions
 - Import/export to PKCS#12
-- Should work on any platform supported by Qt
+- Currently works on os/x ... Should compile on Linux, preferably with clang.
+- Should also build on windows -- I haven't tried building on windows or linux yet 
 
-Platforms for release binaries : 
-- Windows release
-- Will compile on Linux someday
-- I don't have any Mac for OSX release. 
-
-Binary includes openssl library version 1.1.1g compiled for 64 bits Windows platform.
-
-Source code for openssl can be found at : https://www.openssl.org/source/
-
-Licence : GPL V3
-
-Installation / doc : ![here](docs/01-installation.md)
-
-Main (and only !) window : 
-
-![MAIN](img/main.jpg)
 

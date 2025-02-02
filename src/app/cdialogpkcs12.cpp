@@ -184,7 +184,7 @@ void CDialogPKCS12::on_pushButtonSaveAs_clicked()
     {
         return;
     }
-    if ( (fileOpen=fopen_s(&file,filename.toLocal8Bit().data(),"wb")) != 0)
+    if (fileOpen=((file = fopen(filename.toLocal8Bit().data(),"wb")) != 0))
     {
         QMessageBox::warning(this,tr("Error opening file"),tr("Cannot open file : ")+filename);
     }
