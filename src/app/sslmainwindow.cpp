@@ -4,11 +4,8 @@
 QString SSLMainWindow::CBdata="";
 QMutex SSLMainWindow::CBMutex;
 
+QString IniFileName="YAOG_settings";
 
-/**
-TODO
-ASSERT: "refCount.load() >= 0" in file thread\qmutex_p.h, line 101
- */
 
 SSLWorker::SSLWorker(SSLCertificates* newcert)
 {
@@ -87,8 +84,7 @@ SSLMainWindow::SSLMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::
     QCoreApplication::setOrganizationDomain("");
     QCoreApplication::setApplicationName("YAOGApp");
 
-    this->get_settings("default");    
-    this->check_updates();
+    this->get_settings(IniFileName);
     srand (static_cast<unsigned int>(time(nullptr)));
 
     // updates of key/cert checks
@@ -1702,11 +1698,17 @@ void SSLMainWindow::DlgPKCS12_Finished(bool Cancel, bool MainCertImport, int caC
 }
 
 /************************ Settings ************************************************/
+QString getHomeFilePath(const QString &filename)
+{
+	QDir  appdir = QDir(QCoreApplication::applicationDirPath());
+    QString path = appdir.filePath(filename);
+    return path;
+}
 
 void SSLMainWindow::get_settings(QString setting)
 {
-    setting+=".ini";
-    QSettings settings(setting, QSettings::IniFormat, this);
+     // Get the HOME environment variable
+    QSettings settings(getHomeFilePath(setting), QSettings::IniFormat, this);
     //Cert object
     this->ui->lineEditCertCN->setText(settings.value("Cert/CN","Cert object").toString());
     this->ui->lineEditCertC->setText(settings.value("Cert/C","").toString());
@@ -1736,15 +1738,11 @@ void SSLMainWindow::get_settings(QString setting)
         addExtensionLine(newelement);
     }
 
-    // Check for updates
-    this->checkUpdate=settings.value("Global/checkupdate",3).toInt();
-    this->checkUpdateNum=settings.value("Global/checkupdate_num",0).toInt();
 }
 
 void SSLMainWindow::save_settings(QString setting)
 {
-    setting+=".ini";
-    QSettings settings(setting, QSettings::IniFormat, this);
+    QSettings settings(getHomeFilePath(setting), QSettings::IniFormat, this);
     //Cert object
     settings.setValue("Cert/CN",this->ui->lineEditCertCN->text().toLocal8Bit());
     settings.setValue("Cert/C",this->ui->lineEditCertC->text().toLocal8Bit());
@@ -1768,103 +1766,7 @@ void SSLMainWindow::save_settings(QString setting)
 
 void SSLMainWindow::on_pushButtonSaveSettings_clicked()
 {
-    this->save_settings("default");
-}
-
-/************************ Update stuff ********************************************/
-
-void SSLMainWindow::check_updates()
-{
-    if (this->checkUpdate==0)
-        return;
-    if (this->checkUpdate==3)
-    {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, tr("Check for updates"), tr("Do you want to check for updates at startup ?\nInformation sent is : version + platform"),
-                                      QMessageBox::Yes|QMessageBox::No);
-        QSettings settings("default.ini", QSettings::IniFormat, this);
-        if (reply == QMessageBox::Yes) {
-          settings.setValue("Global/checkupdate",1);
-          this->checkUpdate=1;
-        } else {
-          settings.setValue("Global/checkupdate",0);
-          this->checkUpdate=0;
-          return;
-        }
-    }
-    //qDebug() << QSslSocket::supportsSsl() << endl << QSslSocket::sslLibraryBuildVersionString() <<endl << QSslSocket::sslLibraryVersionString();
-    network = new QNetworkAccessManager(this);
-    connect(network, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(network_reply_finished(QNetworkReply*)));
-    connect(network,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),
-            this,SLOT(network_reply_SSL_error(QNetworkReply*,QList<QSslError>)));
-
-    QUrl updateurl=QUrl(UPDATESRC);
-
-    QUrlQuery postdata;
-    // Why are you looking at this, you didn't trust the message box :-) ?
-    postdata.addQueryItem("secret",USER_ALL_PASSWORDS_FOUND);
-    postdata.addQueryItem("version",YAOGVERSIONF);
-    postdata.addQueryItem("platform",YAOGPLATFORM);
-
-    QNetworkRequest request=QNetworkRequest(updateurl);
-    QSslConfiguration sslconf(QSslConfiguration::defaultConfiguration());
-    request.setSslConfiguration(sslconf);
-
-   // qDebug() << sslconf.->sslLibraryBuildVersionString()
-    //sslSocket->sslLibraryVersionString()
-
-    request.setRawHeader("User-Agent", "YAOG Update 1.0");
-    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
-
-    network->post(request,postdata.toString(QUrl::FullyEncoded).toUtf8());
-}
-
-void SSLMainWindow::network_reply_SSL_error(QNetworkReply* reply,QList<QSslError> SSLErr)
-{
-  qDebug() << "SSL error";
-  int size=SSLErr.size();
-  while ( size>0)
-    {
-      qDebug() << SSLErr.at(size).errorString();
-      size--;
-    }
-  reply->deleteLater();
-  //Silently die (alone) as not critical feature.
-}
-
-void SSLMainWindow::network_reply_finished(QNetworkReply* reply) //TODO
-{
-    QRegularExpression ok("^OK:.*");
-    QRegularExpression update("^UPDATE:.*");
-    QByteArray bts = reply->readAll();
-    QString str(bts);
-    //QMessageBox::information(this,"Reply","return  : "+str,"OK");
-    reply->deleteLater();
-
-    if (ok.match(str).hasMatch())
-    {
-        //QMessageBox::information(this,"Up to date",str,"OK");
-        return;
-    }
-    if (update.match(str).hasMatch())
-    { // TODO : download and update after user OK with it
-      if (this->checkUpdateNum == 0)
-      {
-        QMessageBox::information(this,"Update Available",str,"OK");
-        this->checkUpdateNum = 10;
-      }
-      else
-      {
-        this->checkUpdateNum--;
-      }
-      QSettings settings("default.ini", QSettings::IniFormat, this);
-      settings.setValue("Global/checkupdate_num",this->checkUpdateNum);
-      return;
-    }
-    //QMessageBox::information(this,"Error update","returned : " + str);
-    //TODO On all other errors, check last OK reply : if older than 1 month, alert user
-    //For now, silently die (alone)
+    this->save_settings(IniFileName);
 }
 
 /*********************** Stack window and stack **********************************/

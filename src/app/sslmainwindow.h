@@ -26,10 +26,9 @@
 #include "cdialogpkcs12.h"
 #include "stackwindow.h"
 
-#define YAOGVERSION "1.1.2"
-#define YAOGVERSIONF "01010200"
-#define YAOGPLATFORM "W64"
-#define UPDATESRC "https://www.proy.org/yaog/update.php"
+#define YAOGVERSION "2.0.0"
+#define YAOGVERSIONF "02000000"
+#define YAOGPLATFORM "A64"
 
 #define PASSWORD_MAX_LENGTH 100
 #define MAX_CERT_SIZE 30000
@@ -37,7 +36,10 @@
 #define OUTPUT_TYPE_CERT 1
 #define OUTPUT_TYPE_CSR 2
 
+QString getHomeFilePath(const QString &filename);
+
 namespace Ui {
+
 class SSLMainWindow;
 }
 
@@ -282,16 +284,6 @@ private:
      */
     void save_settings(QString setting);
 
-    // network stuff for updates
-    QNetworkAccessManager * network;
-    int checkUpdate; //!< 0: no check, 1 check updates, 3 unknown (ask)
-    int checkUpdateNum; //!< number of times before warning user again about updates
-    /**
-     * @brief check_updates unless settings say no
-     */
-    void check_updates();
-
-
 public slots:
     //void sslfinished(); (use of  QSignalMapper).
     /**
@@ -310,9 +302,7 @@ public slots:
     void add_extension(QString ext, QString value, bool critical);
 
     void DlgPKCS12_Finished(bool Cancel, bool MainCertImport, int caCertImport);
-    void network_reply_finished(QNetworkReply* reply);
-    void network_reply_SSL_error(QNetworkReply* reply,QList<QSslError> SSLErr);
-    /**
+     /**
      * @brief Import certificate
      * @param certificate CertData
      */

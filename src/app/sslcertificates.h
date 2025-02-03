@@ -438,13 +438,13 @@ private:
     static void(*output_display)(const char*);//!< Called function to display messages when calculating keys
 
 /* X509 subject and other options */
-    char* subject_id[100]; //! < Subject id list (ex : CN, O, L...)
-    unsigned char* subject[100]; //!<  Subject value list (subject in to subject_id)
+    char* subject_id[32]; //! < Subject id list (ex : CN, O, L...)
+    unsigned char* subject[256]; //!<  Subject value list (subject in to subject_id)
     int subjectNum; //!< subject list number
-    std::string extensionName [100]; //!< X509 extension name
-    std::string extensionVal[100]; //!< X509 extension value
-    int extensionCritical[100]; //!< X509 extension critical (1) or not (0)
-    int extensionNID[100]; //!< X509 extension NID
+    std::string extensionName [256]; //!< X509 extension name
+    std::string extensionVal[256]; //!< X509 extension value
+    int extensionCritical[256]; //!< X509 extension critical (1) or not (0)
+    int extensionNID[256]; //!< X509 extension NID
     int extensionNum; //!< extensions num
     ASN1_TIME* startDate; //!< certificate valid from this time
     ASN1_TIME* endDate; //!< certificate valid until this time

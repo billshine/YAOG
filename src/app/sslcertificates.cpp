@@ -425,6 +425,14 @@ int SSLCertificates::create_key()
 #endif
     return 0;
 }
+void print_openssl_errors() {
+    unsigned long err;
+    while ((err = ERR_get_error()) != 0) {
+        char err_msg[256];
+        ERR_error_string_n(err, err_msg, sizeof(err_msg));
+        printf("OpenSSL Error: %s \n",err_msg);
+    }
+}
 
 int SSLCertificates::create_cert()
 {
